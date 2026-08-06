@@ -136,13 +136,46 @@ re-derived from the PCB switch coordinates and match exactly, at 14.00 x
 module — the KB2040's onboard RESET and BOOT buttons are not externally
 accessible, the same situation as the v2's own reset switch.
 
-**The USB-C opening in the 3D-printed case must be enlarged.** Measured from
-Adafruit's board file, against the micro-USB it replaces:
+**The USB-C connector is wider than the micro-B it replaces.** Measured from
+Adafruit's board file:
 
 | | micro-B | USB-C | Delta |
 | --- | --- | --- | --- |
 | Connector width | 7.370 mm | 8.940 mm | +1.570 (about +0.79 per side) |
 | Face inset from board edge | 0.145 mm | 0.462 mm | +0.317 deeper |
+
+On the width alone this does **not** require a case change. The bezel in
+`Case/3dp-full-case/full-case-bezels.kicad_pcb` already has a 17.462 mm notch in
+its top edge (x 133.350 to 150.812), centred at x 142.081 — the module centre —
+so an 8.940 mm connector clears it by about 4.26 mm a side. Only the width was
+checked. The opening's height, whether a plug's overmold clears the recessed
+board edge, and the printed `.stl` / `.FCStd` models were not measured.
+
+### Fabrication outputs
+
+`jlcpcb/gerber/` and `schematic.pdf` have been re-exported from the modified
+design. The originals were plotted with KiCad 6.0.0 in 2022 and these with
+KiCad 10.0.5, so the newer plotter re-renders mask and silkscreen and the file
+diff is much larger than the design change. To separate the two, the *upstream*
+board was exported with the same tool and settings and diffed against the new
+export. Everything below is that comparison, not a claim about the raw diff:
+
+| Layer | Change attributable to this modification |
+| --- | --- |
+| F.Cu, B.Cu | **none** — 38 differing lines per layer, every one an X2 `%TO.P%` pad-name attribute; zero geometry ops |
+| PTH, NPTH drill | **none** — 212 and 168 holes, byte-identical |
+| Edge.Cuts | **none** — 24 ops, identical |
+| F.Mask, B.Mask | **none** |
+| F.Silkscreen, B.Silkscreen | changed, and confined to a 17.780 x 33.020 mm window — exactly the module outline |
+
+`jlcpcb/assembly/` was deliberately **not** regenerated. No footprint moved (59
+before, 59 after, zero position or rotation changes), and neither the BOM nor
+the position file ever listed the MCU — they cover only the parts JLCPCB
+machine-assembles.
+
+The plate and back plate exports (`Case/switchplate/*/*.dxf`,
+`Case/backplate/Gerbers/`) are also unchanged, because neither of those boards
+was modified.
 
 ### Not verified
 
@@ -155,5 +188,10 @@ Stated so you know where to double-check rather than trust this document:
   screws and 9 mm standoffs against v2/v3's 4 mm and 4 mm; that figure is
   repeated here as hearsay and was **not** derived from these files. Confirm
   against the real parts before ordering hardware.
-* **Gerbers and the plate DXF have not been regenerated** and still reflect the
-  Pro Micro layout. Re-export before fabricating.
+* **Nothing has been test-fabricated.** The gerbers are regenerated and were
+  checked against a same-tool export of the upstream board, but no board house
+  has run them and no panel has been built from them.
+* **The exports come from a newer KiCad than the design file.** The board is
+  still in KiCad 6 format and was plotted with KiCad 10.0.5. That is normal and
+  the geometry was verified, but if you have KiCad 6 to hand, re-plotting there
+  would keep the toolchain consistent.
