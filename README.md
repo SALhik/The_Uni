@@ -1,5 +1,5 @@
 # The Uni Board
-The uni-body split ortholinear keyboard for stenography, or the Uni for short. By Peter C Park. I used KiCad Nightly Release so the kicad files are not compatible with older version.
+The uni-body split ortholinear keyboard for stenography, or the Uni for short. By Peter C Park. I used KiCad Nightly Release so the KiCad files are incompatible with older versions.
 
 Buy it now at [StenoKeyboards.com](https://www.stenokeyboards.com/).
 
@@ -76,7 +76,10 @@ unreleased StenoKeyboards design files were used, referenced, or copied.
 Deliberately **unchanged**: key layout, switch matrix, diode topology, board
 outline, mounting holes, and the MX/Alps/Choc hybrid switch footprint that gives
 the board its spring-swap compatibility. The 24 through-hole pads keep their
-exact original coordinates, drill sizes and nets, so no track was rerouted. This
+exact original coordinates and drill sizes, and every *matrix* net keeps its pad
+assignment, so no track was rerouted. One net name did change: the logic rail on
+pad 21, `+5V` -> `+3V3`, per the table above. That rename is the only net-name
+difference in the design, and the connectivity comparison normalises it. This
 was verified by exporting the netlist before and after: 50 nets and 138 nodes in
 both, with an identical connectivity graph.
 
@@ -119,12 +122,15 @@ minimum text height, at which four characters do not fit between adjacent pads.
 ### Castellated pads
 
 The KB2040 has castellated edge pads for reflow mounting; **they are not placed
-on this board, and the module must be through-hole soldered.** This was tested,
-not assumed: existing B.Cu matrix tracks already run through the channel where
-the castellations would land, and pads at every size tried — down to 1.0 x
-1.0 mm, below the point of being reliably solderable — produced 10 net-to-net
-copper shorts, because each castellation sits on top of its neighbour's track.
-Fitting them would require rerouting the matrix.
+on this board, and the module must be through-hole soldered.** That is a layout
+result rather than an assumption, but it comes from a PCB-layout and DRC
+experiment in `unisplit_orthosteno.kicad_pcb`, not from a built board.
+Castellated pads were added to the U1 footprint and shrunk down to 1.0 x 1.0 mm,
+and at every size tried KiCad's DRC reported 10 net-to-net copper shorts against
+the existing B.Cu matrix tracks, which already run through the channel where the
+castellations would land — each castellation lands on top of its neighbour's
+track. Nothing about solderability or reflow assembly was checked on hardware.
+Fitting the castellations would require rerouting the matrix.
 
 ### Case and plate
 
