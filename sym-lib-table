@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "uni-symbols")(type "KiCad")(uri "${KIPRJMOD}/uni-symbols.kicad_sym")(options "")(descr "Project symbols, including the KB2040 module"))
+)
