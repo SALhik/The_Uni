@@ -162,7 +162,7 @@ export. Everything below is that comparison, not a claim about the raw diff:
 
 | Layer | Change attributable to this modification |
 | --- | --- |
-| F.Cu, B.Cu | **none** — 38 differing lines per layer, every one an X2 `%TO.P%` pad-name attribute; zero geometry ops |
+| F.Cu, B.Cu | **no geometry change** — 40 differing lines per layer, all X2 netlist attributes: 38 `%TO.P%` pad names plus the 2 `%TO.N%` lines carrying the `+5V` -> `+3V3` rail rename; zero geometry ops |
 | PTH, NPTH drill | **none** — 212 and 168 holes, byte-identical |
 | Edge.Cuts | **none** — 24 ops, identical |
 | F.Mask, B.Mask | **none** |
